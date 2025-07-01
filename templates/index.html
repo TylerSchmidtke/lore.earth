@@ -1,0 +1,97 @@
+{% extends "base.html" %} {% block content %}
+<div class="header-bar">
+    {% if config.description %}
+    <h2>{{ config.description }}</h2>
+    {% endif %}
+    <br />
+    <br />
+    <hr />
+    <br />
+    <br />
+</div>
+
+<div class="posts">
+    {# Collect all pages from all sections #}
+    {% set_global all_pages = [] %}
+
+    {# Get pages from root content directory #}
+    {% for page in section.pages %}
+        {% set_global all_pages = all_pages | concat(with=page) %}
+    {% endfor %}
+
+    {# Get pages from photography section #}
+    {% set photography_section = get_section(path="photography/_index.md") %}
+    {% for page in photography_section.pages %}
+        {% set_global all_pages = all_pages | concat(with=page) %}
+    {% endfor %}
+
+    {# Get pages from writing section #}
+    {% set writing_section = get_section(path="writing/_index.md") %}
+    {% for page in writing_section.pages %}
+        {% set_global all_pages = all_pages | concat(with=page) %}
+    {% endfor %}
+
+    {# Get pages from audio section #}
+    {% set audio_section = get_section(path="audio/_index.md") %}
+    {% for page in audio_section.pages %}
+        {% set_global all_pages = all_pages | concat(with=page) %}
+    {% endfor %}
+
+    {# Sort all pages by date (newest first) #}
+    {% set sorted_pages = all_pages | sort(attribute="date") | reverse %}
+
+    {# Use the sorted pages directly since we're manually collecting them #}
+    {% set show_pages = sorted_pages %}
+
+    <ul class="post-list">
+        {% for page in show_pages %}
+        <li class="post on-list">
+            <div class="post-header">
+                <div class="post-info">
+                    <h3 class="post-title">
+                        <a href="{{ page.permalink | safe }}">{{ page.title }}</a>
+                    </h3>
+                    {% if page.date %}
+                    <p class="post-meta">
+                        <span class="post-date">
+                            {{ page.date | date(format="%B %d, %Y") }}
+                        </span>
+                        <span>
+                            {% if page.authors %} — {{ page.authors | join(sep=", ") }}
+                            {% endif %}
+                        </span>
+                    </p>
+                    {% endif %}
+                </div>
+                {% if page.extra.image %}
+                <div class="post-preview-image">
+                    <a href="{{ page.permalink | safe }}">
+                        <picture>
+                            <source srcset="/images/{{ page.extra.image }}.avif" type="image/avif">
+                            <img src="/images/{{ page.extra.image }}.jpg" alt="{{ page.extra.image_alt | default(value=page.title) }}" loading="lazy">
+                        </picture>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            <div class="post-content">{{ page.description | safe }}</div>
+            <br />
+            <hr />
+        </li>
+        {% endfor %}
+    </ul>
+
+    {# Show pagination controls if paginator is available #} {% if paginator is
+    defined %}
+    <footer class="page-footer">
+        <nav>
+            {% if paginator.previous %}
+            <a class="prev" href="{{ paginator.previous }}">← Previous</a>
+            {% endif %} {% if paginator.next %}
+            <a class="next" href="{{ paginator.next }}">Next →</a>
+            {% endif %}
+        </nav>
+    </footer>
+    {% endif %}
+</div>
+{% endblock content %}
