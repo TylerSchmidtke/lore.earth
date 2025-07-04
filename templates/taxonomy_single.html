@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="taxonomy-page">
+  <h1>Posts tagged "{{ term.name }}"</h1>
+
+  <p class="taxonomy-description">
+    {{ term.pages | length }}
+    {% if term.pages | length == 1 %}post{% else %}posts{% endif %}
+    tagged with "{{ term.name }}"
+  </p>
+
+  <div class="posts-list">
+    {% for page in term.pages %}
+    <article class="post-summary">
+      <h2><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h2>
+
+      {% if page.date %}
+      <p class="post-meta">
+        <span class="post-date">{{ page.date | date(format="%B %d, %Y") }}</span>
+        {% if page.authors %}
+        <span> — {{ page.authors | join(sep=", ") }}</span>
+        {% endif %}
+      </p>
+      {% endif %}
+
+      {% if page.summary %}
+      <p class="post-excerpt">{{ page.summary | safe }}</p>
+      {% endif %}
+
+      {% if page.taxonomies and page.taxonomies.tags %}
+      <div class="post-tags">
+        {% for tag in page.taxonomies.tags | sort %}
+        <a class="post-tag" href="{{ get_taxonomy_url(kind='tags', name=tag) | safe }}">{{ tag }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+
+  <p><a href="/tags/">← All tags</a></p>
+</div>
+{% endblock content %}

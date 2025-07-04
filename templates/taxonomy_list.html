@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="taxonomy-page">
+  <h1>All Tags</h1>
+
+  <p class="taxonomy-description">
+    {{ terms | length }}
+    {% if terms | length == 1 %}tag{% else %}tags{% endif %}
+  </p>
+
+  <div class="tags-cloud">
+    {% for term in terms | sort(attribute="name") %}
+    <a href="{{ term.permalink | safe }}" class="tag-link">
+      <span class="tag-name">{{ term.name }}</span>
+      <span class="tag-count">({{ term.pages | length }})</span>
+    </a>
+    {% endfor %}
+  </div>
+
+  <div class="tags-list">
+    {% for term in terms | sort(attribute="name") %}
+    <div class="tag-group">
+      <h2><a href="{{ term.permalink | safe }}">{{ term.name }}</a></h2>
+      <p class="tag-description">
+        {{ term.pages | length }}
+        {% if term.pages | length == 1 %}post{% else %}posts{% endif %}
+      </p>
+
+      <div class="tag-posts">
+        {% for page in term.pages | sort(attribute="date") | reverse %}
+        <article class="post-summary">
+          <h3><a href="{{ page.permalink | safe }}">{{ page.title }}</a></h3>
+          {% if page.date %}
+          <p class="post-meta">
+            <span class="post-date">{{ page.date | date(format="%B %d, %Y") }}</span>
+          </p>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

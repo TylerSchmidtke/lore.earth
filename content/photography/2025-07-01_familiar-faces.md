@@ -2,9 +2,12 @@
 title = "familiar faces"
 date = "2025-07-01"
 
+[taxonomies]
+tags = ["art", "urban", "durham, nc"]
+
 [extra]
 image = "familiar-faces"
-image_alt = "Familiar Faces - a colorful mural of a woman, with her hair flowing and flowers enveloping her face, on a pillar in a parking lot. next to the mural a Jeep is parked. it is rusted above the passenger side front wheel. there are small rubber ducks on the dash."
+image_alt = "Familiar Faces - a colorful mural of a woman, with her hair flowing and flowers enveloping her face, on a pillar in a parking lot. next to the mural a Jeep is parked. it is rusted above the passenger side front wheel. there are six small rubber ducks on the dash."
 image_title = "familiar faces"
 +++
 

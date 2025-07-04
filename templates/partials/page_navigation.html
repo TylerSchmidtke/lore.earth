@@ -1,0 +1,23 @@
+{%- if page.lower or page.higher %}
+<p><hr></p>
+<div>
+  <div class="pagination__buttons">
+    {%- if page.higher %}
+    <span class="previous">
+      <a href="{{ page.higher.permalink | safe }}">
+        <span class="button__icon">←</span>&nbsp;
+        <span class="button__text">{{ page.higher.title | truncate(length=35, end="...")}}</span>
+      </a>
+    </span>
+    {% endif %}
+    {% if page.lower %}
+    <span class="next">
+      <a href="{{ page.lower.permalink | safe }}">
+        <span class="button__text">{{ page.lower.title | truncate(length=35, end="...")}}</span>&nbsp;
+        <span class="button__icon">→</span>
+      </a>
+    </span>
+    {% endif -%}
+  </div>
+</div>
+{% endif -%}

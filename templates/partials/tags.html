@@ -1,0 +1,9 @@
+{%- if page.taxonomies and page.taxonomies.tags %}
+<p><hr></p>
+<div class="post-tags">
+  <span>tags:</span>
+  {%- for tag in page.taxonomies.tags | sort | unique(case_sensitive=false) %}
+  <a class="post-tag" href="{{ get_taxonomy_url(kind='tags', name=tag) | safe }}">{{ tag }}</a>
+  {% endfor -%}
+</div>
+{% endif -%}

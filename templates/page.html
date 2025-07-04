@@ -26,61 +26,14 @@
     </p>
     {% endif -%}
     <br>
-    {%- if page.extra.image %}
-    <div class="post-image">
-      <a href="#image-modal" class="expandable-image">
-        <picture>
-          <source srcset="/images/{{ page.extra.image }}.avif" type="image/avif">
-          <img src="/images/{{ page.extra.image }}.jpg" alt="{{ page.extra.image_alt | default(value=page.title) }}" title="{{ page.extra.image_title | default(value=page.title) }}">
-        </picture>
-      </a>
-
-      <div id="image-modal" class="image-modal">
-        <a href="#" class="close">&times;</a>
-        <picture>
-          <source srcset="/images/{{ page.extra.image }}.avif" type="image/avif">
-          <img src="/images/{{ page.extra.image }}.jpg" alt="{{ page.extra.image_alt | default(value=page.title) }}">
-        </picture>
-      </div>
-    </div>
-    {% endif -%}
+    {% include "partials/image_modal.html" %}
+    {% include "partials/audio_player.html" %}
     <div class="post-content">
       {{ page.content | safe }}
     </div>
   </article>
-  {%- if page.taxonomies and page.taxonomies.tags %}
-  <p><hr></p>
-  <span class="post-tags">
-    tags:
-    {%- set sep = ",&nbsp;" -%}
-    {%- for tag in page.taxonomies.tags | sort | unique(case_sensitive=false) %}
-    <a class="post-tag" href="{{ get_taxonomy_url(kind='tags', name=tag) | safe }}">{{ tag }}</a>
-    {%- if not loop.last %}{{ sep | safe }}{% endif -%}
-    {% endfor -%}
-  </span>
-  {% endif -%}
-  {%- if page.lower or page.higher %}
-  <p><hr></p>
-  <div>
-    <div class="pagination__buttons">
-      {%- if page.higher %}
-      <span class="previous">
-        <a href="{{ page.higher.permalink | safe }}">
-          <span class="button__icon">←</span>&nbsp;
-          <span class="button__text">{{ page.higher.title | truncate(length=35, end="...")}}</span>
-        </a>
-      </span>
-      {% endif %}
-      {% if page.lower %}
-      <span class="next">
-        <a href="{{ page.lower.permalink | safe }}">
-          <span class="button__text">{{ page.lower.title | truncate(length=35, end="...")}}</span>&nbsp;
-          <span class="button__icon">→</span>
-        </a>
-      </span>
-      {% endif -%}
-    </div>
-  </div>
-  {% endif -%}
+  {% include "partials/tags.html" %}
+  {% include "partials/page_navigation.html" %}
 </div>
+
 {% endblock content %}

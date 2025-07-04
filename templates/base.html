@@ -14,6 +14,7 @@
   <meta property="og:type" content="article">
   <meta property="og:url" content="{{ current_url }}">
 
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/style.css" />
   {%- if config.extra.theme_color %}
     <link rel="stylesheet" href="{{ get_url(path="/color/" ~ config.extra.theme_color ~ ".css", trailing_slash=false) | safe }}">
@@ -87,6 +88,136 @@
   <!-- optional scripts -->
   {% block scripts %}
   {% endblock scripts %}
+
+  {%- if page.extra.audio %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js"></script>
+
+  <!-- Audio player script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const audioData = [];
+      const audioPlayers = document.querySelectorAll('.audio-player');
+
+      audioPlayers.forEach((player, index) => {
+        const audioId = player.dataset.audioId;
+        const playBtn = player.querySelector('.play-btn');
+        const progressFill = player.querySelector('.progress-fill');
+        const progressBar = player.querySelector('.progress-bar');
+        const currentTimeEl = player.querySelector('.current-time');
+        const durationEl = player.querySelector('.duration');
+        const rewindBtn = player.querySelector('.rewind-btn');
+        const fastForwardBtn = player.querySelector('.fast-forward-btn');
+
+        const downloadBtn = player.querySelector('.download-btn');
+
+        let howl = null;
+        let isInitialized = false;
+
+        // Initialize Howler instance on first interaction
+        function initializeHowl() {
+          if (!isInitialized) {
+            howl = new Howl({
+              src: [downloadBtn.href],
+              html5: true,
+              preload: false,
+              onload: function() {
+                const duration = howl.duration();
+                durationEl.textContent = formatTime(duration);
+              },
+              onplay: function() {
+                playBtn.querySelector('.play-icon').style.display = 'none';
+                playBtn.querySelector('.pause-icon').style.display = 'block';
+                requestAnimationFrame(updateProgress);
+              },
+              onpause: function() {
+                playBtn.querySelector('.play-icon').style.display = 'block';
+                playBtn.querySelector('.pause-icon').style.display = 'none';
+              },
+              onend: function() {
+                playBtn.querySelector('.play-icon').style.display = 'block';
+                playBtn.querySelector('.pause-icon').style.display = 'none';
+                progressFill.style.width = '0%';
+                currentTimeEl.textContent = '0:00';
+              }
+            });
+            audioData[audioId] = howl;
+            isInitialized = true;
+          }
+        }
+
+        // Play/pause button
+        playBtn.addEventListener('click', function() {
+          initializeHowl();
+
+          if (howl && howl.playing()) {
+            howl.pause();
+          } else {
+            // Pause all other audio players
+            audioData.forEach((otherHowl, otherIndex) => {
+              if (otherIndex != audioId && otherHowl && otherHowl.playing()) {
+                otherHowl.pause();
+              }
+            });
+            if (howl) {
+              howl.play();
+            }
+          }
+        });
+
+        // Progress bar click to seek
+        progressBar.addEventListener('click', function(e) {
+          if (!isInitialized) return;
+
+          const rect = progressBar.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const percentage = clickX / rect.width;
+          const duration = howl.duration();
+          const newTime = duration * percentage;
+          howl.seek(newTime);
+        });
+
+        // Rewind button (10 seconds)
+        rewindBtn.addEventListener('click', function() {
+          if (!isInitialized) return;
+
+          const currentSeek = howl.seek();
+          const newSeek = Math.max(0, currentSeek - 10);
+          howl.seek(newSeek);
+        });
+
+        // Fast forward button (10 seconds)
+        fastForwardBtn.addEventListener('click', function() {
+          if (!isInitialized) return;
+
+          const currentSeek = howl.seek();
+          const duration = howl.duration();
+          const newSeek = Math.min(duration, currentSeek + 10);
+          howl.seek(newSeek);
+        });
+
+        // Update progress
+        function updateProgress() {
+          if (howl && howl.playing()) {
+            const seek = howl.seek();
+            const duration = howl.duration();
+            const percentage = (seek / duration) * 100;
+            progressFill.style.width = percentage + '%';
+            currentTimeEl.textContent = formatTime(seek);
+            requestAnimationFrame(updateProgress);
+          }
+        }
+
+        // Format time helper
+        function formatTime(seconds) {
+          const mins = Math.floor(seconds / 60);
+          const secs = Math.floor(seconds % 60);
+          return mins + ':' + (secs < 10 ? '0' : '') + secs;
+        }
+      });
+    });
+  </script>
+  {% endif -%}
+
 </body>
 
 </html>

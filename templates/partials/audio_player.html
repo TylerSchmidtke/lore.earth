@@ -1,0 +1,55 @@
+{%- if page.extra.audio %}
+<div class="post-audio">
+  {%- for audio_item in page.extra.audio %}
+  <div class="audio-player" data-audio-id="{{ loop.index0 }}">
+    <div class="audio-info">
+      {%- if audio_item.title %}
+      <h3 class="audio-title">{{ audio_item.title }}</h3>
+      {% endif -%}
+      {%- if audio_item.artist %}
+      <p class="audio-artist">{{ audio_item.artist }}</p>
+      {% endif -%}
+      {%- if audio_item.description %}
+      <p class="audio-description">{{ audio_item.description }}</p>
+      {% endif -%}
+    </div>
+    <div class="audio-controls">
+      <button class="play-btn" data-audio-id="{{ loop.index0 }}">
+        <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+          <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+      </button>
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div class="progress-fill" data-audio-id="{{ loop.index0 }}"></div>
+        </div>
+        <div class="time-display">
+          <span class="current-time" data-audio-id="{{ loop.index0 }}">0:00</span>
+          <span class="duration" data-audio-id="{{ loop.index0 }}">0:00</span>
+        </div>
+      </div>
+      <div class="audio-actions">
+        <button class="rewind-btn" data-audio-id="{{ loop.index0 }}">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+          </svg>
+        </button>
+        <button class="fast-forward-btn" data-audio-id="{{ loop.index0 }}">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
+          </svg>
+        </button>
+        <a href="/audio/{{ audio_item.file }}" class="download-btn" download>
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endfor -%}
+</div>
+{% endif -%}

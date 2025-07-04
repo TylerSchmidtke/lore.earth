@@ -1,0 +1,18 @@
+{%- if page.extra.image %}
+<div class="post-image">
+  <a href="#image-modal" class="expandable-image">
+    <picture>
+      <source srcset="/images/{{ page.extra.image }}.avif" type="image/avif">
+      <img src="/images/{{ page.extra.image }}.jpg" alt="{{ page.extra.image_alt | default(value=page.title) }}" title="{{ page.extra.image_title | default(value=page.title) }}">
+    </picture>
+  </a>
+
+  <div id="image-modal" class="image-modal">
+    <a href="#" class="close">&times;</a>
+    <picture>
+      <source srcset="/images/{{ page.extra.image }}.avif" type="image/avif">
+      <img src="/images/{{ page.extra.image }}.jpg" alt="{{ page.extra.image_alt | default(value=page.title) }}">
+    </picture>
+  </div>
+</div>
+{% endif -%}
