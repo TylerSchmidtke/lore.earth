@@ -26,6 +26,9 @@ body {
     color: $text-color;
     background-color: $background-color;
     -webkit-text-size-adjust: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 p,
@@ -265,10 +268,8 @@ hr {
 
 .site-footer {
     font-size: 11px;
-    padding: 2px;
-    position: fixed;
-    left: 0px;
-    bottom: 0px;
+    padding: 20px 0;
+    margin-top: auto;
     width: 100%;
 
     .wrapper {
@@ -300,7 +301,8 @@ hr {
 }
 
 .page-content {
-    padding: 100px 0;
+    padding: 100px 0 40px 0;
+    flex: 1;
 }
 
 .page-heading {
@@ -404,14 +406,167 @@ hr {
 }
 
 .post-tags {
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+
+    > span {
+        font-size: 12px;
+        color: $grey-color;
+        margin-right: 8px;
+        line-height: 1.2;
+    }
+
     a {
-        color: var(--theme-color);
+        display: inline-flex;
+        align-items: center;
+        padding: 4px 8px;
+        background: none;
+        border: 1px solid $grey-color-light;
+        border-radius: 4px;
+        color: $grey-color;
         font-weight: 100;
+        font-size: 12px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        line-height: 1.2;
 
         &:hover {
+            background: $grey-color-light;
+            color: $text-color;
             text-decoration: none;
         }
     }
+}
+
+.post-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: none;
+    border: 1px solid $grey-color-light;
+    border-radius: 4px;
+    color: $grey-color;
+    font-weight: 100;
+    font-size: 12px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    line-height: 1.2;
+    margin-right: 6px;
+    margin-bottom: 3px;
+
+    &:hover {
+        background: $grey-color-light;
+        color: $text-color;
+        text-decoration: none;
+    }
+}
+
+.tag-link {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 8px;
+    background: none;
+    border: 1px solid $grey-color-light;
+    border-radius: 4px;
+    color: $grey-color;
+    font-weight: 100;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    line-height: 1.2;
+    margin-right: 6px;
+    margin-bottom: 4px;
+
+    &:hover {
+        background: $grey-color-light;
+        color: $text-color;
+        text-decoration: none;
+    }
+
+    .tag-name {
+        font-size: 13px;
+    }
+
+    .tag-count {
+        font-size: 12px;
+        opacity: 0.7;
+        margin-left: 4px;
+    }
+}
+
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 20px 0;
+}
+
+.tags-list {
+    margin: 30px 0;
+}
+
+.tag-group {
+    margin-bottom: 30px;
+    border-bottom: 1px solid $grey-color-light;
+    padding-bottom: 20px;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    h2 {
+        margin-bottom: 5px;
+
+        a {
+            color: $text-color;
+            text-decoration: none;
+
+            &:hover {
+                color: var(--theme-color);
+            }
+        }
+    }
+}
+
+.tag-description {
+    color: $grey-color;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.tag-posts {
+    .post-summary {
+        margin-bottom: 15px;
+
+        h3 {
+            margin-bottom: 5px;
+            font-size: 18px;
+
+            a {
+                color: $text-color;
+                text-decoration: none;
+
+                &:hover {
+                    color: var(--theme-color);
+                }
+            }
+        }
+    }
+}
+
+.taxonomy-page {
+    h1 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+}
+
+.taxonomy-description {
+    color: $grey-color;
+    font-size: 16px;
+    margin-bottom: 30px;
 }
 
 .project {

@@ -1,11 +1,13 @@
 base_url = "https://lore.earth"
 compile_sass = true
+minify_html = true
 # build_search_index = true
 generate_feeds = true
 feed_filenames = ["atom.xml", "rss.xml"]
 author = "Lore"
 title = "lore.earth"
 description = "excerpts from an existence at ease"
+taxonomies = [{ name = "tags", feed = true }]
 
 [markdown]
 highlight_code = true
@@ -19,4 +21,5 @@ menu_items = [
     { name = "audio", url = "/audio/" },
     { name = "photography", url = "/photography/" },
     { name = "writing", url = "/writing/" },
+    { name = "tags", url = "/tags/" },
 ]
