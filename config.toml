@@ -6,7 +6,7 @@ generate_feeds = true
 feed_filenames = ["atom.xml", "rss.xml"]
 author = "Lore"
 title = "lore.earth"
-description = "excerpts from an existence at ease"
+description = "Excerpts from an Existence at Ease"
 taxonomies = [{ name = "tags", feed = true }]
 
 [markdown]

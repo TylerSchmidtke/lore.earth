@@ -1,9 +1,9 @@
 +++
-title = "familiar faces"
+title = "Familiar Faces"
 date = "2025-07-01"
 
 [taxonomies]
-tags = ["art", "urban", "durham, nc"]
+tags = ["art", "urban", "Durham, NC"]
 
 [extra]
 image = "familiar-faces"
@@ -11,6 +11,6 @@ image_alt = "Familiar Faces - a colorful mural of a woman, with her hair flowing
 image_title = "familiar faces"
 +++
 
-durham, nc. a familiar mural and a recently familiar jeep. the jeep had previously been searching for parking when i first noticed it. successfully finding its way to a spot next to the mural shortly after.
+Durham, NC. A familiar mural and a recently familiar Jeep. The Jeep had previously been searching for parking when I first noticed it, successfully finding its way to a spot next to the mural shortly after.
 
-seven familiar faces, on a night where there had been none.
+Seven familiar faces, on a night where there had been none.

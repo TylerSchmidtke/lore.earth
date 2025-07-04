@@ -1,0 +1,4 @@
+images/familiar-faces.jpg filter=lfs diff=lfs merge=lfs -text
+images/tasman-sea.jpg filter=lfs diff=lfs merge=lfs -text
+images/familiar-faces.avif filter=lfs diff=lfs merge=lfs -text
+images/tasman-sea.avif filter=lfs diff=lfs merge=lfs -text

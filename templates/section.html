@@ -47,6 +47,15 @@
                 {% endif %}
             </div>
             <div class="post-content">{{ page.description | safe }}</div>
+            <div class="post-section">
+                {% if page.path is containing("audio/") %}
+                    Audio
+                {% elif page.path is containing("photography/") %}
+                    Photography
+                {% elif page.path is containing("writing/") %}
+                    Writing
+                {% endif %}
+            </div>
             <br />
             <hr />
         </li>
