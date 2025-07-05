@@ -73,63 +73,7 @@ $text-color: #555;
         max-height: 90dvh; // Dynamic viewport height for mobile
         object-fit: contain;
         box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.5);
-    }
-
-    .close {
-        position: absolute;
-        top: max(1.25rem, env(safe-area-inset-top, 1.25rem));
-        right: max(1.875rem, env(safe-area-inset-right, 1.875rem));
-        color: white;
-        font-size: clamp(1.5rem, 5vw, 2.5rem);
-        font-weight: bold;
-        text-decoration: none;
-        opacity: 0.7;
-        z-index: 1001;
-
-        // Ensure close button has enough touch target area on mobile
-        min-width: 44px;
-        min-height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        // Mobile-specific improvements
-        @include media-query($on-palm) {
-            // Higher z-index for mobile to ensure visibility
-            z-index: 10000;
-
-            // Larger, more accessible touch target
-            min-width: 48px;
-            min-height: 48px;
-
-            // Semi-transparent background for better visibility
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 50%;
-
-            // Improved positioning with safe area insets
-            top: max(15px, env(safe-area-inset-top, 15px));
-            right: max(15px, env(safe-area-inset-right, 15px));
-
-            // Better visibility
-            opacity: 0.9;
-            color: white;
-
-            // Prevent text selection and improve touch
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-
-        &:hover {
-            opacity: 1;
-
-            @include media-query($on-palm) {
-                background: rgba(0, 0, 0, 0.9);
-            }
-        }
+        cursor: default;
     }
 }
 

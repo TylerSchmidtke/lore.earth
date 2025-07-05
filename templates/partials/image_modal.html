@@ -8,11 +8,33 @@
   </a>
 
   <div id="image-modal" class="image-modal">
-    <a href="#" class="close">&times;</a>
+
     <picture>
       <source srcset="/images/{{ page.extra.image }}.avif" type="image/avif">
       <img src="/images/{{ page.extra.image }}.jpg" alt="{{ page.extra.image_alt | default(value=page.title) }}">
     </picture>
   </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const imageModal = document.getElementById('image-modal');
+  const modalImg = imageModal ? imageModal.querySelector('img') : null;
+
+  if (imageModal && modalImg) {
+    // Close modal when clicking outside the image
+    imageModal.addEventListener('click', function(e) {
+      // Check if the click was on the modal background (not the image or close button)
+      if (e.target === imageModal) {
+        window.location.hash = '#';
+      }
+    });
+
+    // Prevent clicks on the image itself from closing the modal
+    modalImg.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  }
+});
+</script>
 {% endif -%}
