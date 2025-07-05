@@ -271,8 +271,11 @@
           const clickX = clientX - rect.left;
           const percentage = clickX / rect.width;
           const duration = howl.duration();
-          const newTime = duration * percentage;
-          howl.seek(newTime);
+          if (duration > 0) {
+            const newTime = duration * percentage;
+            howl.seek(newTime);
+          }
+          updateProgressBar();
         }
 
         progressBar.addEventListener('click', handleProgressBarSeek);
@@ -298,8 +301,11 @@
           if (!isInitialized) return;
 
           const currentSeek = howl.seek();
-          const newSeek = Math.max(0, currentSeek - 10);
-          howl.seek(newSeek);
+          if (typeof currentSeek === 'number' && currentSeek >= 0) {
+            const newSeek = Math.max(0, currentSeek - 10);
+            howl.seek(newSeek);
+          }
+          updateProgressBar();
         }
 
         rewindBtn.addEventListener('click', handleRewind);
@@ -321,8 +327,11 @@
 
           const currentSeek = howl.seek();
           const duration = howl.duration();
-          const newSeek = Math.min(duration, currentSeek + 10);
-          howl.seek(newSeek);
+          if (typeof currentSeek === 'number' && currentSeek >= 0 && duration > 0) {
+            const newSeek = Math.min(duration, currentSeek + 10);
+            howl.seek(newSeek);
+          }
+          updateProgressBar();
         }
 
         fastForwardBtn.addEventListener('click', handleFastForward);
@@ -347,6 +356,19 @@
             progressFill.style.width = percentage + '%';
             currentTimeEl.textContent = formatTime(seek);
             requestAnimationFrame(updateProgress);
+          }
+        }
+
+        // Update progress bar immediately (for seeking)
+        function updateProgressBar() {
+          if (howl) {
+            const seek = howl.seek();
+            const duration = howl.duration();
+            if (typeof seek === 'number' && seek >= 0 && duration > 0) {
+              const percentage = (seek / duration) * 100;
+              progressFill.style.width = percentage + '%';
+              currentTimeEl.textContent = formatTime(seek);
+            }
           }
         }
 
