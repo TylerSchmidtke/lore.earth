@@ -3,7 +3,10 @@
 
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <title>{{ page.title | default(value=config.title) | safe }}</title>
@@ -37,13 +40,12 @@
         {%- if config.extra.menu_items %}
         {%- set menu_items = config.extra.menu_items -%}
         {%- for item in menu_items %}
-        <a class="page-link" href="{{ item.url | safe }}">{{ item.name
-          | safe }}</a>
+        <a class="page-link" href="{{ item.url | safe }}">{{ item.name | safe }}</a>
         {% endfor -%}
         {% endif -%}
         {% block search %}
         {%- if config.build_search_index %}
-        <div class="site-nav">
+        <div class="search-container">
           <input class="search" id="search" type="text" placeholder="Search">
         </div>
         <div class="search-results">
@@ -120,6 +122,8 @@
               src: [downloadBtn.href],
               html5: true,
               preload: false,
+              // iOS-specific audio settings
+              format: ['mp3', 'wav', 'aac'],
               onload: function() {
                 const duration = howl.duration();
                 durationEl.textContent = formatTime(duration);
@@ -138,6 +142,9 @@
                 playBtn.querySelector('.pause-icon').style.display = 'none';
                 progressFill.style.width = '0%';
                 currentTimeEl.textContent = '0:00';
+              },
+              onloaderror: function() {
+                console.error('Audio failed to load:', downloadBtn.href);
               }
             });
             audioData[audioId] = howl;
@@ -146,7 +153,7 @@
         }
 
         // Play/pause button
-        playBtn.addEventListener('click', function() {
+        function handlePlayPause() {
           initializeHowl();
 
           if (howl && howl.playing()) {
@@ -162,37 +169,62 @@
               howl.play();
             }
           }
+        }
+
+        playBtn.addEventListener('click', handlePlayPause);
+        playBtn.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          handlePlayPause();
         });
 
-        // Progress bar click to seek
-        progressBar.addEventListener('click', function(e) {
+        // Progress bar click/touch to seek
+        function handleProgressBarSeek(e) {
           if (!isInitialized) return;
 
           const rect = progressBar.getBoundingClientRect();
-          const clickX = e.clientX - rect.left;
+          const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+          const clickX = clientX - rect.left;
           const percentage = clickX / rect.width;
           const duration = howl.duration();
           const newTime = duration * percentage;
           howl.seek(newTime);
+        }
+
+        progressBar.addEventListener('click', handleProgressBarSeek);
+        progressBar.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          handleProgressBarSeek(e);
         });
 
         // Rewind button (10 seconds)
-        rewindBtn.addEventListener('click', function() {
+        function handleRewind() {
           if (!isInitialized) return;
 
           const currentSeek = howl.seek();
           const newSeek = Math.max(0, currentSeek - 10);
           howl.seek(newSeek);
+        }
+
+        rewindBtn.addEventListener('click', handleRewind);
+        rewindBtn.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          handleRewind();
         });
 
         // Fast forward button (10 seconds)
-        fastForwardBtn.addEventListener('click', function() {
+        function handleFastForward() {
           if (!isInitialized) return;
 
           const currentSeek = howl.seek();
           const duration = howl.duration();
           const newSeek = Math.min(duration, currentSeek + 10);
           howl.seek(newSeek);
+        }
+
+        fastForwardBtn.addEventListener('click', handleFastForward);
+        fastForwardBtn.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          handleFastForward();
         });
 
         // Update progress
@@ -217,6 +249,78 @@
     });
   </script>
   {% endif -%}
+
+  <!-- Navigation layout script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const siteHeader = document.querySelector('.site-header');
+      const titleNav = document.querySelector('.title-nav');
+      const siteNav = document.querySelector('.site-nav');
+
+      function checkNavLayout() {
+        if (!siteHeader || !titleNav || !siteNav) {
+          return;
+        }
+
+        const wrapper = siteHeader.querySelector('.wrapper');
+        if (!wrapper) {
+          return;
+        }
+
+        // Remove any existing layout classes
+        wrapper.classList.remove('nav-below', 'nav-compact');
+
+        // Force layout recalculation
+        wrapper.offsetHeight;
+
+        // Wait for next frame to ensure layout is complete
+        requestAnimationFrame(() => {
+          const wrapperRect = wrapper.getBoundingClientRect();
+          const titleRect = titleNav.getBoundingClientRect();
+          const navRect = siteNav.getBoundingClientRect();
+
+          const wrapperWidth = wrapperRect.width;
+          const titleWidth = titleRect.width;
+          const navWidth = navRect.width;
+          const minSpacing = 40; // Minimum spacing between elements
+
+          const totalNeeded = titleWidth + navWidth + minSpacing;
+          const needsNavBelow = totalNeeded > wrapperWidth;
+
+          // Check if we need compact mode (tight but still on same row)
+          const compactThreshold = wrapperWidth * 0.9; // 90% of available width
+          const needsCompact = totalNeeded > compactThreshold && !needsNavBelow;
+
+          if (needsNavBelow) {
+            wrapper.classList.add('nav-below');
+            wrapper.classList.remove('nav-compact');
+          } else if (needsCompact) {
+            wrapper.classList.add('nav-compact');
+            wrapper.classList.remove('nav-below');
+          } else {
+            wrapper.classList.remove('nav-below', 'nav-compact');
+          }
+        });
+      }
+
+      // Check on load with multiple fallbacks
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', checkNavLayout);
+      } else {
+        checkNavLayout();
+      }
+
+      // Also check after a short delay to ensure CSS is fully loaded
+      setTimeout(checkNavLayout, 200);
+
+      // Check on resize with debouncing
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(checkNavLayout, 150);
+      });
+    });
+  </script>
 
 </body>
 

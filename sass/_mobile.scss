@@ -1,0 +1,302 @@
+// Mobile responsive styles
+@include media-query($on-palm) {
+    // iOS-specific fixes
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+    }
+
+    // Force hardware acceleration for smooth scrolling
+    body {
+        -webkit-overflow-scrolling: touch;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+    // Base typography improvements
+    body {
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    // Header improvements
+    .site-header {
+        min-height: auto;
+        padding: 10px 0;
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    }
+
+    .site-title {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+
+    .title-nav {
+        float: none;
+        text-align: center;
+        line-height: 1.5;
+        margin-bottom: 0;
+
+        .page-link-title {
+            font-size: 18px;
+        }
+    }
+
+    .site-nav {
+        margin-top: 0;
+        text-align: center;
+        width: 100%;
+
+        .page-link {
+            font-size: 16px;
+            margin: 0 0.5rem;
+            white-space: nowrap;
+        }
+
+        .search {
+            margin-top: 0.5rem;
+            width: 200px;
+        }
+    }
+
+    // Header bar improvements
+    .header-bar {
+        padding: 15px;
+
+        h1 {
+            font-size: clamp(2rem, 10vw, 3rem) !important;
+        }
+
+        h2 {
+            font-size: clamp(0.9rem, 4vw, 1.25rem) !important;
+            line-height: 1.5;
+            padding: 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+    // Page content
+    .page-content {
+        padding: 120px 0 40px 0;
+    }
+
+    // Post list improvements
+    .post-list {
+        margin: 0;
+        padding: 0;
+
+        > li {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+        }
+    }
+
+    // Post header layout
+    .post-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .post-info {
+        order: 2;
+        width: 100%;
+
+        .post-title {
+            font-size: 24px !important;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .post-meta {
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+    }
+
+    .post-preview-image {
+        width: 100%;
+        max-width: 250px;
+        align-self: center;
+        order: 1;
+        margin-bottom: 15px;
+    }
+
+    // Post content
+    .post-content {
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 15px;
+
+        h1 {
+            font-size: 28px;
+            line-height: 1.2;
+        }
+
+        h2 {
+            font-size: 24px;
+            line-height: 1.2;
+        }
+
+        h3 {
+            font-size: 22px;
+            line-height: 1.2;
+        }
+
+        h4 {
+            font-size: 20px;
+            line-height: 1.2;
+        }
+
+        h5 {
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        h6 {
+            font-size: 16px;
+            line-height: 1.2;
+        }
+    }
+
+    // Post title link
+    .post-link {
+        font-size: 28px;
+    }
+
+    // Post section indicator
+    .post-section {
+        text-align: center;
+        font-size: 11px;
+        margin-top: 10px;
+    }
+
+    // Wrapper improvements
+    .wrapper {
+        padding-right: clamp(15px, 4vw, 30px);
+        padding-left: clamp(15px, 4vw, 30px);
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    // Audio player improvements
+    .audio-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        // iOS fixes
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+    }
+
+    .progress-container {
+        min-width: 0;
+        // iOS fixes
+        -webkit-appearance: none;
+        width: 100%;
+    }
+
+    .audio-actions {
+        justify-content: center;
+        // iOS fixes
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    // iOS-specific audio player fixes
+    .play-btn {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        // Better touch targets for iOS
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+
+        svg {
+            pointer-events: none;
+            // Force proper sizing on iOS
+            width: 1rem !important;
+            height: 1rem !important;
+            max-width: 1rem !important;
+            max-height: 1rem !important;
+            min-width: 1rem !important;
+            min-height: 1rem !important;
+        }
+    }
+
+    .progress-bar {
+        height: 0.5rem; // Slightly larger for better touch on mobile
+        // iOS fixes
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
+    }
+
+    .rewind-btn,
+    .fast-forward-btn {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        // Better touch targets
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+
+        svg {
+            pointer-events: none;
+            // Force proper sizing on iOS
+            width: 0.875rem !important;
+            height: 0.875rem !important;
+            max-width: 0.875rem !important;
+            max-height: 0.875rem !important;
+            min-width: 0.875rem !important;
+            min-height: 0.875rem !important;
+        }
+    }
+
+    .download-btn {
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        // Better touch targets
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+
+        svg {
+            pointer-events: none;
+            // Force proper sizing on iOS
+            width: 0.875rem !important;
+            height: 0.875rem !important;
+            max-width: 0.875rem !important;
+            max-height: 0.875rem !important;
+            min-width: 0.875rem !important;
+            min-height: 0.875rem !important;
+        }
+    }
+
+    // Project thumbnails
+    .project {
+        width: 100%;
+    }
+
+    // Grid improvements
+    .one-third-width,
+    .half-width,
+    .two-thirds-width {
+        width: 100%;
+    }
+}
