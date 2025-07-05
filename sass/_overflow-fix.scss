@@ -1,0 +1,91 @@
+// Overflow fix for horizontal scrolling issues
+// This file addresses the extra space on the right side that causes horizontal scrolling
+
+// Prevent horizontal overflow at the root level
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+// Fix wrapper containers to prevent overflow
+.wrapper {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+
+    @include media-query($on-palm) {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+    }
+}
+
+// Fix specific elements that commonly cause overflow
+.site-header,
+.page-content,
+.site-footer {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+.post-list,
+.post-header,
+.post-content {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+// Fix images to prevent overflow
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+// Fix any code blocks that might cause overflow
+pre,
+code {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+// Mobile-specific fixes
+@include media-query($on-palm) {
+    // Additional mobile overflow prevention
+    .post-preview-image {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .post-info {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .header-bar {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+
+        h1,
+        h2 {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+}
+
+// Fix any elements with explicit widths that might cause overflow
+* {
+    box-sizing: border-box;
+}

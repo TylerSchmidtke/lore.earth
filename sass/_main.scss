@@ -137,6 +137,8 @@ $text-color: #555;
         gap: 1rem;
         align-items: center;
         text-align: center;
+        width: 100%;
+        margin: 0 auto $vertical-spacing-unit;
     }
 }
 
@@ -463,7 +465,7 @@ $text-color: #555;
     opacity: 0.7;
 
     @include media-query($on-palm) {
-        text-align: left;
+        text-align: center;
         margin-top: 0.75rem;
     }
 }
@@ -472,15 +474,20 @@ $text-color: #555;
 @include media-query($on-palm) {
     // Better post list spacing on mobile
     .post-list {
+        margin: 0 auto;
+        width: 100%;
+
         > li {
             margin-bottom: clamp(2rem, 6vh, 3rem);
             padding-bottom: clamp(2rem, 6vh, 3rem);
+            width: 100%;
         }
     }
 
     // Header improvements for mobile
     .header-bar {
         padding-top: 1rem;
+        text-align: center;
 
         h1 {
             @include fluid-font(2rem, 3rem);
@@ -490,6 +497,8 @@ $text-color: #555;
             @include fluid-font(1rem, 1.25rem);
             line-height: 1.4;
             padding: 0 1rem;
+            margin: 0 auto;
+            max-width: 100%;
         }
     }
 }
@@ -499,9 +508,101 @@ $text-color: #555;
     max-width: min(70rem, 92vw);
     margin: 0 auto;
     padding: 0 clamp(1rem, 3vw, 2rem);
+    box-sizing: border-box;
 
     @include media-query($on-palm) {
-        max-width: 95vw;
-        padding: 0 max(1rem, 2.5vw);
+        max-width: 100vw;
+        padding: 0 clamp(1rem, 3vw, 2rem);
+        margin: 0 auto;
     }
+}
+
+// Overflow fixes for horizontal scrolling issues
+// Prevent horizontal overflow at the root level
+html {
+    overflow-x: hidden;
+}
+
+body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+}
+
+// Fix wrapper containers to prevent overflow
+.wrapper {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+
+    @include media-query($on-palm) {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+    }
+}
+
+// Fix specific elements that commonly cause overflow
+.site-header,
+.page-content,
+.site-footer {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+.post-list,
+.post-header,
+.post-content {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+}
+
+// Fix images to prevent overflow
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+// Fix any code blocks that might cause overflow
+pre,
+code {
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+// Mobile-specific fixes
+@include media-query($on-palm) {
+    // Additional mobile overflow prevention
+    .post-preview-image {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .post-info {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .header-bar {
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100%;
+
+        h1,
+        h2 {
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100%;
+        }
+    }
+}
+
+// Fix any elements with explicit widths that might cause overflow
+* {
+    box-sizing: border-box;
 }
