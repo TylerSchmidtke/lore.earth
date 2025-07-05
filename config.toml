@@ -17,6 +17,15 @@ render_emoji = true
 # index_format = "elasticlunr_javascript"
 
 [extra]
+# Theme color for meta tags (hex value)
+# This color is used for:
+# - Android Chrome's address bar color
+# - iOS Safari's status bar color
+# - Windows tile color
+# - PWA theme color
+# Default: "#000000" (black)
+# Examples: "#dc2626" (red), "#2563eb" (blue), "#059669" (green)
+theme_color_hex = "#000000"
 menu_items = [
     { name = "audio", url = "/audio/" },
     { name = "photography", url = "/photography/" },

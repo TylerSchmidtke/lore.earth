@@ -7,6 +7,16 @@
   <meta name="format-detection" content="telephone=no" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+
+  <!-- Android-specific meta tags -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="application-name" content="{{ config.title }}" />
+  <meta name="theme-color" content="{{ config.extra.theme_color_hex | default(value="#000000") }}" />
+  <meta name="msapplication-TileColor" content="{{ config.extra.theme_color_hex | default(value="#000000") }}" />
+  <meta name="msapplication-navbutton-color" content="{{ config.extra.theme_color_hex | default(value="#000000") }}" />
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="MobileOptimized" content="width" />
+  <meta name="screen-orientation" content="portrait" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
   <title>{{ page.title | default(value=config.title) | safe }}</title>
@@ -96,6 +106,56 @@
 
   <!-- Audio player script -->
   <script>
+    // Android browser detection and optimization
+    function isAndroid() {
+      return /Android/.test(navigator.userAgent);
+    }
+
+    function isAndroidChrome() {
+      return isAndroid() && /Chrome/.test(navigator.userAgent);
+    }
+
+    function isAndroidFirefox() {
+      return isAndroid() && /Firefox/.test(navigator.userAgent);
+    }
+
+    // iOS browser detection
+    function isIOS() {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent);
+    }
+
+    // Log platform detection
+    console.log('Platform detection:', {
+      isAndroid: isAndroid(),
+      isAndroidChrome: isAndroidChrome(),
+      isAndroidFirefox: isAndroidFirefox(),
+      isIOS: isIOS(),
+      userAgent: navigator.userAgent
+    });
+
+    // Android-specific audio context unlock
+    function unlockAudioContextOnAndroid() {
+      if (isAndroid()) {
+        const unlockAudio = function() {
+          if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
+            const audioContext = new (AudioContext || webkitAudioContext)();
+            if (audioContext.state === 'suspended') {
+              audioContext.resume();
+            }
+          }
+          document.removeEventListener('touchstart', unlockAudio);
+          document.removeEventListener('touchend', unlockAudio);
+          document.removeEventListener('click', unlockAudio);
+        };
+        document.addEventListener('touchstart', unlockAudio);
+        document.addEventListener('touchend', unlockAudio);
+        document.addEventListener('click', unlockAudio);
+      }
+    }
+
+    // Initialize Android audio context unlock
+    unlockAudioContextOnAndroid();
+
     document.addEventListener('DOMContentLoaded', function() {
       const audioData = [];
       const audioPlayers = document.querySelectorAll('.audio-player');
@@ -122,8 +182,11 @@
               src: [downloadBtn.href],
               html5: true,
               preload: false,
-              // iOS-specific audio settings
-              format: ['mp3', 'wav', 'aac'],
+              // iOS and Android-specific audio settings
+              format: ['mp3', 'wav', 'aac', 'ogg', 'webm'],
+              // Android Chrome audio policy compliance
+              autoplay: false,
+              mute: false,
               onload: function() {
                 const duration = howl.duration();
                 durationEl.textContent = formatTime(duration);
@@ -145,6 +208,13 @@
               },
               onloaderror: function() {
                 console.error('Audio failed to load:', downloadBtn.href);
+              },
+              // Android-specific audio event handlers
+              onplayerror: function() {
+                console.error('Audio playback error on Android:', downloadBtn.href);
+              },
+              onunlock: function() {
+                console.log('Audio unlocked on Android');
               }
             });
             audioData[audioId] = howl;
@@ -177,6 +247,21 @@
           handlePlayPause();
         });
 
+        // Android-specific event handlers
+        if (isAndroid()) {
+          playBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+          });
+
+          // Android Chrome specific fixes
+          if (isAndroidChrome()) {
+            playBtn.addEventListener('pointerdown', function(e) {
+              e.preventDefault();
+              handlePlayPause();
+            });
+          }
+        }
+
         // Progress bar click/touch to seek
         function handleProgressBarSeek(e) {
           if (!isInitialized) return;
@@ -196,6 +281,18 @@
           handleProgressBarSeek(e);
         });
 
+        // Android-specific progress bar handling
+        if (isAndroid()) {
+          progressBar.addEventListener('touchmove', function(e) {
+            e.preventDefault();
+            handleProgressBarSeek(e);
+          });
+
+          progressBar.addEventListener('touchend', function(e) {
+            e.preventDefault();
+          });
+        }
+
         // Rewind button (10 seconds)
         function handleRewind() {
           if (!isInitialized) return;
@@ -210,6 +307,13 @@
           e.preventDefault();
           handleRewind();
         });
+
+        // Android-specific rewind handling
+        if (isAndroid()) {
+          rewindBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+          });
+        }
 
         // Fast forward button (10 seconds)
         function handleFastForward() {
@@ -226,6 +330,13 @@
           e.preventDefault();
           handleFastForward();
         });
+
+        // Android-specific fast forward handling
+        if (isAndroid()) {
+          fastForwardBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+          });
+        }
 
         // Update progress
         function updateProgress() {

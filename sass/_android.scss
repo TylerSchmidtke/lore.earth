@@ -1,0 +1,690 @@
+// Android-specific fixes and optimizations
+
+// Android Chrome and WebView audio player fixes
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+  // Audio player container
+  .audio-player {
+    // Force hardware acceleration on Android
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    // Fix Android flexbox issues
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-direction: column;
+    -moz-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+
+    // Android Chrome scrolling fixes
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+  }
+
+  // Audio controls container
+  .audio-controls {
+    // Android flexbox fixes
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    -moz-box-pack: start;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+
+    // Android gap property fallback
+    gap: 1rem;
+    margin: 0 -0.5rem;
+
+    > * {
+      margin: 0 0.5rem;
+    }
+
+    // Android Chrome tap delay fix
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
+
+  // Play button fixes
+  .play-btn {
+    // Remove Android button styling
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+
+    // Force dimensions for Android
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    min-width: 2.5rem !important;
+    min-height: 2.5rem !important;
+
+    // Android touch improvements
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -moz-touch-callout: none;
+    touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    // Android Chrome focus fixes
+    outline: none;
+    outline-offset: 0;
+
+    // Fix Android flexbox centering
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+
+    // Prevent Android flex shrinking
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+
+    // Android hardware acceleration
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    svg {
+      // Force SVG dimensions on Android
+      width: 1rem !important;
+      height: 1rem !important;
+      max-width: 1rem !important;
+      max-height: 1rem !important;
+      min-width: 1rem !important;
+      min-height: 1rem !important;
+
+      // Fix Android SVG rendering
+      display: block;
+      -webkit-flex-shrink: 0;
+      -moz-flex-shrink: 0;
+      -ms-flex-negative: 0;
+      flex-shrink: 0;
+      pointer-events: none;
+
+      // Android color inheritance
+      fill: currentColor;
+      color: inherit;
+
+      // Android SVG performance
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+
+    // Android Material Design ripple effect suppression
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    // Android Chrome active state
+    &:active {
+      -webkit-transform: translate3d(0, 0, 0) scale(0.95);
+      transform: translate3d(0, 0, 0) scale(0.95);
+    }
+  }
+
+  // Progress container fixes
+  .progress-container {
+    // Android flexbox fixes
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -moz-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+
+    // Android minimum width
+    min-width: 12rem;
+
+    // Remove Android styling
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+
+    // Android touch improvements
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
+
+  // Progress bar fixes
+  .progress-bar {
+    // Remove Android styling
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+
+    // Android touch target
+    height: 0.5rem;
+    min-height: 0.5rem;
+
+    // Android touch handling
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -moz-touch-callout: none;
+    touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+
+    // Android positioning
+    position: relative;
+    overflow: hidden;
+
+    // Android hardware acceleration
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    // Android Chrome focus ring removal
+    outline: none;
+    outline-offset: 0;
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+    }
+  }
+
+  // Progress fill fixes
+  .progress-fill {
+    // Remove Android styling
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+
+    // Android display
+    display: block;
+
+    // Android hardware acceleration
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    // Android smooth transitions
+    -webkit-transition: width 0.1s ease;
+    -moz-transition: width 0.1s ease;
+    -ms-transition: width 0.1s ease;
+    transition: width 0.1s ease;
+
+    // Android rendering optimization
+    will-change: width;
+  }
+
+  // Audio action buttons
+  .rewind-btn,
+  .fast-forward-btn {
+    // Remove Android styling
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+
+    // Android touch targets
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+
+    // Android touch improvements
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -moz-touch-callout: none;
+    touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    // Android focus fixes
+    outline: none;
+    outline-offset: 0;
+
+    // Android flexbox centering
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+
+    // Android flex shrink prevention
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+
+    // Android hardware acceleration
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    svg {
+      // Force Android SVG dimensions
+      width: 0.875rem !important;
+      height: 0.875rem !important;
+      max-width: 0.875rem !important;
+      max-height: 0.875rem !important;
+      min-width: 0.875rem !important;
+      min-height: 0.875rem !important;
+
+      // Android SVG rendering
+      display: block;
+      -webkit-flex-shrink: 0;
+      -moz-flex-shrink: 0;
+      -ms-flex-negative: 0;
+      flex-shrink: 0;
+      pointer-events: none;
+
+      // Android color inheritance
+      fill: currentColor;
+      color: inherit;
+
+      // Android SVG performance
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+
+    // Android focus ring removal
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    // Android active state
+    &:active {
+      -webkit-transform: translate3d(0, 0, 0) scale(0.95);
+      transform: translate3d(0, 0, 0) scale(0.95);
+    }
+  }
+
+  // Download button fixes
+  .download-btn {
+    // Remove Android styling
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+
+    // Android touch targets
+    min-width: 2.5rem;
+    min-height: 2.5rem;
+
+    // Android touch improvements
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -moz-touch-callout: none;
+    touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    // Android focus fixes
+    outline: none;
+    outline-offset: 0;
+
+    // Android flexbox centering
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+
+    // Android flex shrink prevention
+    -webkit-flex-shrink: 0;
+    -moz-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+
+    // Android hardware acceleration
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    svg {
+      // Force Android SVG dimensions
+      width: 0.875rem !important;
+      height: 0.875rem !important;
+      max-width: 0.875rem !important;
+      max-height: 0.875rem !important;
+      min-width: 0.875rem !important;
+      min-height: 0.875rem !important;
+
+      // Android SVG rendering
+      display: block;
+      -webkit-flex-shrink: 0;
+      -moz-flex-shrink: 0;
+      -ms-flex-negative: 0;
+      flex-shrink: 0;
+      pointer-events: none;
+
+      // Android color inheritance
+      fill: currentColor;
+      color: inherit;
+
+      // Android SVG performance
+      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
+    }
+
+    // Android focus ring removal
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    // Android active state
+    &:active {
+      -webkit-transform: translate3d(0, 0, 0) scale(0.95);
+      transform: translate3d(0, 0, 0) scale(0.95);
+    }
+  }
+
+  // Audio actions container
+  .audio-actions {
+    // Android flexbox fixes
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+
+    // Android gap fallback
+    gap: 0.625rem;
+    margin: 0 -0.3125rem;
+
+    > * {
+      margin: 0 0.3125rem;
+    }
+
+    // Android flex wrap
+    -webkit-flex-wrap: wrap;
+    -moz-flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+
+    // Android touch handling
+    -webkit-tap-highlight-color: transparent;
+    -moz-tap-highlight-color: transparent;
+    tap-highlight-color: transparent;
+  }
+
+  // Time display fixes
+  .time-display {
+    // Android flexbox fixes
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    -moz-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+
+    // Android text selection
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+
+    // Android font rendering
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+// Android-specific mobile improvements
+@media screen and (max-width: 768px) {
+  @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+    .audio-controls {
+      // Android mobile layout
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -webkit-flex-direction: column;
+      -moz-box-orient: vertical;
+      -moz-box-direction: normal;
+      -moz-flex-direction: column;
+      -ms-flex-direction: column;
+      flex-direction: column;
+
+      -webkit-box-align: stretch;
+      -webkit-align-items: stretch;
+      -moz-box-align: stretch;
+      -ms-flex-align: stretch;
+      align-items: stretch;
+
+      // Android mobile spacing
+      gap: 0.75rem;
+      margin: 0;
+
+      > * {
+        margin: 0;
+      }
+    }
+
+    .progress-container {
+      // Android mobile full width
+      width: 100%;
+      min-width: 0;
+    }
+
+    .progress-bar {
+      // Android mobile touch target
+      height: 0.75rem;
+      min-height: 0.75rem;
+    }
+
+    .audio-actions {
+      // Android mobile centering
+      -webkit-box-pack: center;
+      -webkit-justify-content: center;
+      -moz-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+    }
+  }
+}
+
+// Android Chrome-specific fixes
+@supports (-webkit-appearance: none) and (not (-moz-appearance: none)) {
+  .audio-player {
+    // Chrome for Android optimizations
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    will-change: transform;
+  }
+
+  .play-btn,
+  .rewind-btn,
+  .fast-forward-btn,
+  .download-btn {
+    // Chrome for Android button optimizations
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+  }
+}
+
+// Android Firefox-specific fixes
+@supports (-moz-appearance: none) and (not (-webkit-appearance: none)) {
+  .audio-player {
+    // Firefox for Android optimizations
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  .play-btn,
+  .rewind-btn,
+  .fast-forward-btn,
+  .download-btn {
+    // Firefox for Android button fixes
+    -moz-appearance: none;
+    appearance: none;
+
+    &::-moz-focus-inner {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+
+// Android high DPI fixes
+@media screen and (min-device-pixel-ratio: 2),
+       screen and (-webkit-min-device-pixel-ratio: 2),
+       screen and (min-resolution: 192dpi),
+       screen and (min-resolution: 2dppx) {
+  .audio-player {
+    // High DPI Android optimizations
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+  }
+
+  .play-btn svg,
+  .rewind-btn svg,
+  .fast-forward-btn svg,
+  .download-btn svg {
+    // High DPI SVG rendering
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+}
+
+// Android landscape orientation fixes
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .audio-player {
+    // Android landscape padding
+    padding: 0.75rem;
+  }
+
+  .audio-controls {
+    // Android landscape layout
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: row;
+    -moz-box-orient: horizontal;
+    -moz-box-direction: normal;
+    -moz-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+
+    gap: 0.5rem;
+  }
+}
+
+// Android accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  .audio-player,
+  .play-btn,
+  .rewind-btn,
+  .fast-forward-btn,
+  .download-btn,
+  .progress-fill {
+    // Reduce motion for Android accessibility
+    -webkit-transition: none;
+    -moz-transition: none;
+    -ms-transition: none;
+    transition: none;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    transform: none;
+  }
+}
+
+// Android dark mode support
+@media (prefers-color-scheme: dark) {
+  .audio-player {
+    // Android dark mode optimizations
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
