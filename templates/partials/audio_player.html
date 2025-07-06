@@ -21,6 +21,12 @@
         <svg class="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
           <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
+        <div class="loading-indicator" data-audio-id="{{ loop.index0 }}" style="display: none;">
+          <svg class="loading-spinner" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" opacity="0.3"/>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
       </button>
       <div class="progress-container">
         <div class="progress-bar">
