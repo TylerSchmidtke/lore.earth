@@ -97,6 +97,43 @@
     </div>
 
   </footer>
+  <!-- Loading indicator styles -->
+  <style>
+    .play-btn {
+      position: relative;
+    }
+
+    .loading-indicator {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1rem;
+      height: 1rem;
+    }
+
+    .loading-spinner {
+      width: 1rem;
+      height: 1rem;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .loading-spinner {
+        animation: none;
+      }
+    }
+  </style>
+
   <!-- optional scripts -->
   {% block scripts %}
   {% endblock scripts %}
@@ -169,6 +206,7 @@
         const durationEl = player.querySelector('.duration');
         const rewindBtn = player.querySelector('.rewind-btn');
         const fastForwardBtn = player.querySelector('.fast-forward-btn');
+        const loadingIndicator = player.querySelector('.loading-indicator');
 
         const downloadBtn = player.querySelector('.download-btn');
 
@@ -190,10 +228,18 @@
               onload: function() {
                 const duration = howl.duration();
                 durationEl.textContent = formatTime(duration);
+                // Hide loading indicator when audio is loaded
+                if (loadingIndicator) {
+                  loadingIndicator.style.display = 'none';
+                }
               },
               onplay: function() {
                 playBtn.querySelector('.play-icon').style.display = 'none';
                 playBtn.querySelector('.pause-icon').style.display = 'block';
+                // Hide loading indicator when audio starts playing
+                if (loadingIndicator) {
+                  loadingIndicator.style.display = 'none';
+                }
                 requestAnimationFrame(updateProgress);
               },
               onpause: function() {
@@ -208,10 +254,22 @@
               },
               onloaderror: function() {
                 console.error('Audio failed to load:', downloadBtn.href);
+                // Hide loading indicator on error and show play icon
+                if (loadingIndicator) {
+                  loadingIndicator.style.display = 'none';
+                }
+                playBtn.querySelector('.play-icon').style.display = 'block';
+                playBtn.querySelector('.pause-icon').style.display = 'none';
               },
               // Android-specific audio event handlers
               onplayerror: function() {
                 console.error('Audio playback error on Android:', downloadBtn.href);
+                // Hide loading indicator on playback error and show play icon
+                if (loadingIndicator) {
+                  loadingIndicator.style.display = 'none';
+                }
+                playBtn.querySelector('.play-icon').style.display = 'block';
+                playBtn.querySelector('.pause-icon').style.display = 'none';
               },
               onunlock: function() {
                 console.log('Audio unlocked on Android');
@@ -224,11 +282,18 @@
 
         // Play/pause button
         function handlePlayPause() {
-          initializeHowl();
-
           if (howl && howl.playing()) {
             howl.pause();
           } else {
+            // Show loading indicator immediately when user clicks play
+            if (loadingIndicator) {
+              loadingIndicator.style.display = 'block';
+            }
+            playBtn.querySelector('.play-icon').style.display = 'none';
+            playBtn.querySelector('.pause-icon').style.display = 'none';
+
+            initializeHowl();
+
             // Pause all other audio players
             audioData.forEach((otherHowl, otherIndex) => {
               if (otherIndex != audioId && otherHowl && otherHowl.playing()) {
