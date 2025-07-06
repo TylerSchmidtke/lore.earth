@@ -103,6 +103,11 @@
       position: relative;
     }
 
+    .btn-content {
+      position: relative;
+      z-index: 1;
+    }
+
     .loading-indicator, .loading-indicator-rewind, .loading-indicator-fast-forward {
       position: absolute;
       top: 50%;
@@ -110,6 +115,18 @@
       transform: translate(-50%, -50%);
       width: 1rem;
       height: 1rem;
+      z-index: 10;
+      background-color: #fdfdfd;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .loading-indicator, .loading-indicator-rewind, .loading-indicator-fast-forward {
+        background-color: #1a1a1a;
+      }
     }
 
     .loading-indicator-rewind, .loading-indicator-fast-forward {
@@ -121,11 +138,15 @@
       width: 1rem;
       height: 1rem;
       animation: spin 1s linear infinite;
+      position: relative;
+      z-index: 11;
     }
 
     .loading-indicator-rewind .loading-spinner, .loading-indicator-fast-forward .loading-spinner {
       width: 0.875rem;
       height: 0.875rem;
+      position: relative;
+      z-index: 11;
     }
 
     @keyframes spin {
