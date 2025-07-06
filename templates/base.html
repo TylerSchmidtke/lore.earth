@@ -99,11 +99,11 @@
   </footer>
   <!-- Loading indicator styles -->
   <style>
-    .play-btn {
+    .play-btn, .rewind-btn, .fast-forward-btn {
       position: relative;
     }
 
-    .loading-indicator {
+    .loading-indicator, .loading-indicator-rewind, .loading-indicator-fast-forward {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -112,10 +112,20 @@
       height: 1rem;
     }
 
+    .loading-indicator-rewind, .loading-indicator-fast-forward {
+      width: 0.875rem;
+      height: 0.875rem;
+    }
+
     .loading-spinner {
       width: 1rem;
       height: 1rem;
       animation: spin 1s linear infinite;
+    }
+
+    .loading-indicator-rewind .loading-spinner, .loading-indicator-fast-forward .loading-spinner {
+      width: 0.875rem;
+      height: 0.875rem;
     }
 
     @keyframes spin {
@@ -207,11 +217,16 @@
         const rewindBtn = player.querySelector('.rewind-btn');
         const fastForwardBtn = player.querySelector('.fast-forward-btn');
         const loadingIndicator = player.querySelector('.loading-indicator');
+        const loadingIndicatorRewind = player.querySelector('.loading-indicator-rewind');
+        const loadingIndicatorFastForward = player.querySelector('.loading-indicator-fast-forward');
 
         const downloadBtn = player.querySelector('.download-btn');
 
         let howl = null;
         let isInitialized = false;
+        let seekTimeoutRewind = null;
+        let seekTimeoutFastForward = null;
+        let seekTimeoutProgressBar = null;
 
         // Initialize Howler instance on first interaction
         function initializeHowl() {
@@ -231,6 +246,37 @@
                 // Hide loading indicator when audio is loaded
                 if (loadingIndicator) {
                   loadingIndicator.style.display = 'none';
+                }
+              },
+              onseek: function() {
+                // Hide loading indicators when seek operation completes
+                if (loadingIndicatorRewind) {
+                  loadingIndicatorRewind.style.display = 'none';
+                }
+                if (loadingIndicatorFastForward) {
+                  loadingIndicatorFastForward.style.display = 'none';
+                }
+                // Show rewind and fast forward icons again
+                const rewindIcon = rewindBtn.querySelector('.rewind-icon');
+                const fastForwardIcon = fastForwardBtn.querySelector('.fast-forward-icon');
+                if (rewindIcon) {
+                  rewindIcon.style.display = 'block';
+                }
+                if (fastForwardIcon) {
+                  fastForwardIcon.style.display = 'block';
+                }
+                // Clear any pending timeouts
+                if (seekTimeoutRewind) {
+                  clearTimeout(seekTimeoutRewind);
+                  seekTimeoutRewind = null;
+                }
+                if (seekTimeoutFastForward) {
+                  clearTimeout(seekTimeoutFastForward);
+                  seekTimeoutFastForward = null;
+                }
+                if (seekTimeoutProgressBar) {
+                  clearTimeout(seekTimeoutProgressBar);
+                  seekTimeoutProgressBar = null;
                 }
               },
               onplay: function() {
@@ -254,9 +300,24 @@
               },
               onloaderror: function() {
                 console.error('Audio failed to load:', downloadBtn.href);
-                // Hide loading indicator on error and show play icon
+                // Hide all loading indicators on error and show play icon
                 if (loadingIndicator) {
                   loadingIndicator.style.display = 'none';
+                }
+                if (loadingIndicatorRewind) {
+                  loadingIndicatorRewind.style.display = 'none';
+                }
+                if (loadingIndicatorFastForward) {
+                  loadingIndicatorFastForward.style.display = 'none';
+                }
+                // Show rewind and fast forward icons again
+                const rewindIcon = rewindBtn.querySelector('.rewind-icon');
+                const fastForwardIcon = fastForwardBtn.querySelector('.fast-forward-icon');
+                if (rewindIcon) {
+                  rewindIcon.style.display = 'block';
+                }
+                if (fastForwardIcon) {
+                  fastForwardIcon.style.display = 'block';
                 }
                 playBtn.querySelector('.play-icon').style.display = 'block';
                 playBtn.querySelector('.pause-icon').style.display = 'none';
@@ -264,9 +325,24 @@
               // Android-specific audio event handlers
               onplayerror: function() {
                 console.error('Audio playback error on Android:', downloadBtn.href);
-                // Hide loading indicator on playback error and show play icon
+                // Hide all loading indicators on playback error and show play icon
                 if (loadingIndicator) {
                   loadingIndicator.style.display = 'none';
+                }
+                if (loadingIndicatorRewind) {
+                  loadingIndicatorRewind.style.display = 'none';
+                }
+                if (loadingIndicatorFastForward) {
+                  loadingIndicatorFastForward.style.display = 'none';
+                }
+                // Show rewind and fast forward icons again
+                const rewindIcon = rewindBtn.querySelector('.rewind-icon');
+                const fastForwardIcon = fastForwardBtn.querySelector('.fast-forward-icon');
+                if (rewindIcon) {
+                  rewindIcon.style.display = 'block';
+                }
+                if (fastForwardIcon) {
+                  fastForwardIcon.style.display = 'block';
                 }
                 playBtn.querySelector('.play-icon').style.display = 'block';
                 playBtn.querySelector('.pause-icon').style.display = 'none';
@@ -331,6 +407,11 @@
         function handleProgressBarSeek(e) {
           if (!isInitialized) return;
 
+          // Show loading indicator for progress bar seek
+          if (loadingIndicator) {
+            loadingIndicator.style.display = 'block';
+          }
+
           const rect = progressBar.getBoundingClientRect();
           const clientX = e.clientX || (e.touches && e.touches[0].clientX);
           const clickX = clientX - rect.left;
@@ -341,6 +422,17 @@
             howl.seek(newTime);
           }
           updateProgressBar();
+
+          // Fallback timeout in case onseek doesn't fire
+          if (seekTimeoutProgressBar) {
+            clearTimeout(seekTimeoutProgressBar);
+          }
+          seekTimeoutProgressBar = setTimeout(() => {
+            if (loadingIndicator) {
+              loadingIndicator.style.display = 'none';
+            }
+            seekTimeoutProgressBar = null;
+          }, 1000);
         }
 
         progressBar.addEventListener('click', handleProgressBarSeek);
@@ -365,12 +457,37 @@
         function handleRewind() {
           if (!isInitialized) return;
 
+          // Show loading indicator for rewind operation
+          if (loadingIndicatorRewind) {
+            loadingIndicatorRewind.style.display = 'block';
+          }
+          // Hide rewind icon while loading
+          const rewindIcon = rewindBtn.querySelector('.rewind-icon');
+          if (rewindIcon) {
+            rewindIcon.style.display = 'none';
+          }
+
           const currentSeek = howl.seek();
           if (typeof currentSeek === 'number' && currentSeek >= 0) {
             const newSeek = Math.max(0, currentSeek - 10);
             howl.seek(newSeek);
           }
           updateProgressBar();
+
+          // Fallback timeout in case onseek doesn't fire
+          if (seekTimeoutRewind) {
+            clearTimeout(seekTimeoutRewind);
+          }
+          seekTimeoutRewind = setTimeout(() => {
+            if (loadingIndicatorRewind) {
+              loadingIndicatorRewind.style.display = 'none';
+            }
+            const rewindIcon = rewindBtn.querySelector('.rewind-icon');
+            if (rewindIcon) {
+              rewindIcon.style.display = 'block';
+            }
+            seekTimeoutRewind = null;
+          }, 1000);
         }
 
         rewindBtn.addEventListener('click', handleRewind);
@@ -390,6 +507,16 @@
         function handleFastForward() {
           if (!isInitialized) return;
 
+          // Show loading indicator for fast forward operation
+          if (loadingIndicatorFastForward) {
+            loadingIndicatorFastForward.style.display = 'block';
+          }
+          // Hide fast forward icon while loading
+          const fastForwardIcon = fastForwardBtn.querySelector('.fast-forward-icon');
+          if (fastForwardIcon) {
+            fastForwardIcon.style.display = 'none';
+          }
+
           const currentSeek = howl.seek();
           const duration = howl.duration();
           if (typeof currentSeek === 'number' && currentSeek >= 0 && duration > 0) {
@@ -397,6 +524,21 @@
             howl.seek(newSeek);
           }
           updateProgressBar();
+
+          // Fallback timeout in case onseek doesn't fire
+          if (seekTimeoutFastForward) {
+            clearTimeout(seekTimeoutFastForward);
+          }
+          seekTimeoutFastForward = setTimeout(() => {
+            if (loadingIndicatorFastForward) {
+              loadingIndicatorFastForward.style.display = 'none';
+            }
+            const fastForwardIcon = fastForwardBtn.querySelector('.fast-forward-icon');
+            if (fastForwardIcon) {
+              fastForwardIcon.style.display = 'block';
+            }
+            seekTimeoutFastForward = null;
+          }, 1000);
         }
 
         fastForwardBtn.addEventListener('click', handleFastForward);
